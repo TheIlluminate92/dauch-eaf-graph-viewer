@@ -80,13 +80,17 @@ def validate_view(view):
     if chart not in ("lines", "scatter", "both"):
         raise ValueError("Choose Lines, Scatter, or Lines + points.")
     for field, default, choices in (("mode", "individual", ("individual", "overlay")),
-                                     ("x", "elapsed", ("elapsed", "clock")),
+                                     ("x", "elapsed", ("elapsed", "clock", "signal")),
                                      ("lines", "linear", ("linear", "hv"))):
         if view.get(field, default) not in choices:
             raise ValueError(f"Invalid {field} setting.")
+    x_mode = view.get("x", "elapsed")
+    x_signal = view.get("x_signal", "") if x_mode == "signal" else ""
+    if x_mode == "signal" and (not isinstance(x_signal, str) or not 1 <= len(x_signal) <= 255 or not x_signal.strip()):
+        raise ValueError("Choose a recorded signal for the X axis.")
     return {"name": view["name"].strip(), "signals": clean, "width": width, "chart": chart,
             "mode": "overlay" if view.get("mode") == "overlay" else "individual",
-            "x": "clock" if view.get("x") == "clock" else "elapsed",
+            "x": x_mode, "x_signal": x_signal,
             "lines": "hv" if view.get("lines") == "hv" else "linear"}
 
 
@@ -161,6 +165,8 @@ class Session:
 
     def data(self, request):
         traces, missing = [], []
+        if not isinstance(request, dict):
+            raise ValueError("Plot settings must be an object.")
         view = validate_view({**request, "name": "Current"})
         ids = request.get("files", [])
         if not isinstance(ids, list) or any(not isinstance(i, str) for i in ids):
@@ -177,9 +183,21 @@ class Session:
                 idx = f["style"]
                 r = f["recording"]
                 gaps = np.flatnonzero(np.diff(r.seconds) > 5) + 1
-                base_x = (r.seconds-r.seconds[0])/60 if view["x"] == "elapsed" else r.seconds*1000
+                if view["x"] == "signal":
+                    if view["x_signal"] not in r.names:
+                        missing.append(f'{f["name"]}: X signal {view["x_signal"]}')
+                        continue
+                    # Pair X and Y from the same row in the same recording.
+                    # Never sort X, interpolate, or join samples across heats.
+                    base_x = r.values[:, r.names.index(view["x_signal"])].astype(float)
+                else:
+                    base_x = (r.seconds-r.seconds[0])/60 if view["x"] == "elapsed" else r.seconds*1000
                 x = np.insert(base_x, gaps, np.nan)
                 x = [float(v) if np.isfinite(v) else None for v in x]
+                sample_info = None
+                if view["x"] == "signal":
+                    stamps = np.insert(r.seconds, gaps, np.nan)
+                    sample_info = [[datetime.fromtimestamp(t, timezone.utc).isoformat(timespec="milliseconds"), float((t-r.seconds[0])/60)] if np.isfinite(t) else None for t in stamps]
                 for s in view["signals"]:
                     if s["name"] not in r.names:
                         missing.append(f'{f["name"]}: {s["name"]}')
@@ -189,13 +207,17 @@ class Session:
                     # Tags contain spaces, slashes and punctuation: hash them and
                     # start with a letter so every ID is a valid CSS identifier.
                     trace_id = "t" + hashlib.sha256((key + "\0" + s["name"]).encode()).hexdigest()[:24]
-                    traces.append({"type": "scatter", "uid": trace_id, "mode": {"lines": "lines", "scatter": "markers", "both": "lines+markers"}[view["chart"]], "name": f'{f["name"]} · {s["name"]}',
-                        "x": x, "y": [float(v) if np.isfinite(v) else None for v in y],
+                    trace = {"type": "scatter", "uid": trace_id, "mode": {"lines": "lines", "scatter": "markers", "both": "lines+markers"}[view["chart"]], "name": f'{f["name"]} · {s["name"]}',
+                        "x": x, "y": [float(v) if np.isfinite(v) and x[i] is not None else None for i, v in enumerate(y)],
                         "yaxis": "y2" if s["axis"] == "right" else "y", "connectgaps": False,
                         "line": {"color": s["color"], "width": view["width"], "shape": view["lines"], "dash": ["solid", "dash", "dot", "dashdot", "longdash", "longdashdot"][idx % 6]},
                         "marker": {"color": s["color"], "size": 3, "opacity": 0.7,
                                    "symbol": ["circle", "square", "diamond", "triangle-up", "cross", "x"][idx % 6]},
-                        "hovertemplate": "%{x}<br>%{y:.5g}<extra>%{fullData.name}</extra>"})
+                        "hovertemplate": "%{x}<br>%{y:.5g}<extra>%{fullData.name}</extra>"}
+                    if sample_info is not None:
+                        trace["customdata"] = sample_info
+                        trace["hovertemplate"] = "X: %{x:.7g}<br>Y: %{y:.7g}<br>Recorded time: %{customdata[0]}<br>Elapsed: %{customdata[1]:.5g} min<extra>%{fullData.name}</extra>"
+                    traces.append(trace)
         return {"traces": traces, "missing": missing}
 
 

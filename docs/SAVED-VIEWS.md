@@ -1,6 +1,6 @@
 # Saved view reference
 
-This describes `validate_view` in `graph_viewer.py` at v1.0.0. Prefer Export/Import view for routine transfer. Before manual recovery, close viewer sessions and preserve the original file as described in [operations](OPERATIONS.md#back-up-and-recover-saved-views).
+This describes `validate_view` in `graph_viewer.py` at v1.1.0. Prefer Export/Import view for routine transfer. Before manual recovery, close viewer sessions and preserve the original file as described in [operations](OPERATIONS.md#back-up-and-recover-saved-views).
 
 The on-disk `views.json` root is a JSON list of view objects. Each object has the following fields. This is the current accepted contract, not a promised future-version migration format.
 
@@ -11,10 +11,13 @@ The on-disk `views.json` root is a JSON list of view objects. Each object has th
 | width | Number: 0.5, 0.75, 1, 1.5, 2 or 3; booleans rejected | 1 |
 | chart | lines, scatter or both | lines |
 | mode | individual or overlay | individual |
-| x | elapsed or clock | elapsed |
+| x | elapsed, clock or signal | elapsed |
+| x_signal | Recorded tag string, 1–255 characters and not blank, required when x is signal | Empty string for time modes |
 | lines | linear or hv (step) | linear |
 
 Each signal object requires a string `name` of 1–255 characters. Optional `axis` is `left` or `right` (default left). Optional `color` is a seven-character hexadecimal color such as `#c8102e` (that value is the default). Unknown fields are not retained by validation.
+
+v1.1.0 reads older time-based views. v1.0.x rejects views with `x: "signal"`; preserve a pre-upgrade backup for rollback. Missing X tags remain selected and are reported per recording, never substituted.
 
 A minimal on-disk example with no selected signals:
 

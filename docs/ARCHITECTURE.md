@@ -31,13 +31,17 @@ The reader checks exact total length, count limits, row widths, ASCII names, uni
 
 Current implementation limits columns to 1–4096 and rows to 1–65535. Nonfinite signal samples become JSON nulls. No engineering-unit conversions, interpolation, smoothing, or sample reduction are performed. A null break is inserted at gaps greater than five seconds.
 
+## Signal versus signal plots
+
+`x: signal` selects `x_signal` from each recording. Every X/Y pair comes from the same row; repeated and decreasing X values retain their recording order. Nonfinite X values suppress their paired Y values. Gap markers are inserted in both coordinates and sample metadata. X–Y tooltips include UTC timestamps and elapsed minutes; those are metadata, not the horizontal coordinate. Missing X skips that recording with an explicit notice. The request limit applies to X–Y plots too.
+
 ## Plot and pin state
 
 Recordings are identified by a truncated SHA-256 content hash. Each receives a stable style index for its session. Trace IDs hash the recording ID plus signal name and start with a letter, so arbitrary tag punctuation cannot break Plotly selectors.
 
-Each requested plot snapshots settings and uses a generation counter to reject stale responses. Plotly render and resize operations share a queue. During updates or failures, the old plot is hidden so it cannot appear to represent the new selection.
+Each requested plot snapshots settings and uses a generation counter to reject stale responses. Plotly render and resize operations share a queue. The built-in responsive resize handler is disabled so it cannot bypass that queue. During updates or failures, the old plot is hidden so it cannot appear to represent the new selection.
 
-Pin identity is scoped to the recording IDs, signal/axis mapping and time-axis mode. Color, line width, chart style and zoom do not change that context. A pin stores immutable numeric time/left/right coordinates and is reprojected onto current axis ranges. Axis labels are projected independently when the two Y axes have been zoomed independently.
+Pin identity is scoped to the recording IDs, signal/axis mapping and X-axis mode/tag. Color, line width, chart style and zoom do not change that context. A pin stores immutable numeric X/left/right coordinates plus the X label and is reprojected onto current axis ranges. Axis labels are projected independently when the two Y axes have been zoomed independently.
 
 Single clicks are delayed 360 ms to distinguish double-click reset; movement over four pixels is treated as a drag. Mouse release is observed at the window because Plotly creates a temporary drag cover outside the plot. Pins and crosshairs are HTML overlays, separate from Plotly's PNG export.
 

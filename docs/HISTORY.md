@@ -8,7 +8,7 @@ The next request changed the primary input to RPH recordings and clarified the p
 
 Five starter views were then added for SmartArc review. Subsequent requests added finer/adjustable lines, crosshairs with both axes and time, a viewport-filling layout, mouse-wheel zoom, scatter plotting and finally up to ten locked points. The user explicitly requested a detailed bug hunt and testing of the packaged application before delivery.
 
-On 2026-11-13 the user requested GitHub publication with all documentation and a check-in with the local historian. The repository is private; recording files and derived plant data are kept out of Git and release assets.
+On 2026-11-13 the user requested GitHub publication with all documentation and a check-in with the local historian. The repository was initially private and later made public under the owner’s instruction; recording files and derived plant data are kept out of Git and release assets.
 
 ## Current handoff
 
@@ -32,3 +32,10 @@ At Erik's request, Reporter Recreation expanded the README for editing in VS Cod
 - Private fixture handling: modified real recordings remain sensitive source data.
 
 Potential extensions such as persisted annotations, including pins in image exports, event-based heat alignment, and additional RPH formats are not implemented or promised by this release.
+
+
+## November 13, 2026 — X–Y plotting, v1.1.0
+
+Sergio clarified that choosing X versus Y means one recorded variable on the horizontal axis and another on the vertical axis. Added a single X tag selector, Y checkboxes with left/right scales, default Scatter on entering X–Y, sample-paired traces and timestamps, variable-aware cursor/pin labels, and saved/exported X selections. Time-based starter views remain available.
+
+The bug hunt covered same-row pairing, nonmonotonic/duplicate X, missing/nonfinite values, gaps, file isolation, persistence, zoom/pins, stale errors and rapid display changes. The clean Windows build passed source, browser, all-644-axis packaged-engine checks and an automated native drop check with five real recordings plus one derived variant. Updated the packaged program guides and included the historian's project/Python/distribution notice collection. See VALIDATION for scope and limits. The user-authorized public GitHub release is a new immutable version; prior releases remain intact.

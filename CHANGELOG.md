@@ -1,8 +1,17 @@
 # Changes
 
-## Unreleased — licensing maintenance (2026-11-13)
+## v1.1.0 — 2026-11-13
 
-The project now has an MIT license. Future Windows/source ZIPs include it; Windows packaging also collects the matching Python license and available dependency notices. Existing v1.0.0/v1.0.1 releases remain immutable. See [LICENSING.md](LICENSING.md). No runtime behavior or existing release asset changed.
+- Added true X–Y plotting: choose one recorded signal for X and one or more for Y, with left/right Y scales. Switching from time to a signal starts in Scatter.
+- Saved/imported/exported views retain the X signal. Existing time views still load; v1.0.x cannot read the new X–Y view mode.
+- Paired values preserve sample/file identity, gaps and missing values. Hover includes the original timestamp; pins use the chosen X label.
+- Included source and packaged checks for all 644 X columns, multiple recordings, all plot styles, persistence and invalid requests.
+- Disabled the redundant Plotly resize handler and capped long Y descriptions to preserve the viewport.
+- Updated the local README and walkthrough for choosing X/Y and rollback compatibility.
+
+### Licensing maintenance included (2026-11-13)
+
+The project now has an MIT license. The v1.1.0 Windows/source ZIPs include it; Windows packaging also collects the matching Python license and available dependency notices. Existing v1.0.0/v1.0.1 releases remain immutable. See [LICENSING.md](LICENSING.md). The licensing change itself does not alter runtime behavior; prior release assets remain unchanged.
 
 ## v1.0.1 — 2026-11-13
 

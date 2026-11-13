@@ -1,6 +1,8 @@
 // Regression checks for captured values and click/drag/double-click arbitration.
 const assert=require('node:assert/strict');
-const {PinStore,ClickTracker,axisValue,axisFraction,time}=require('./cursor_tools.js');
+const {PinStore,ClickTracker,axisValue,axisFraction,time,xLabel}=require('./cursor_tools.js');
+assert.equal(time(12.5,'signal'),'12.5');assert.equal(time(12.5,'linear'),'12.5 min');
+assert.equal(xLabel({type:'signal',xLabel:'MWTot'}),'X (MWTot)');assert.equal(xLabel({type:'date'}),'Time');
 const linear={type:'linear',range:[-20,80]},right={type:'linear',range:[500,1500]};
 assert.equal(axisValue(linear,.25),5);assert.equal(axisValue(right,.25),750);
 assert.equal(axisFraction({type:'linear',range:[0,10]},5),.5);

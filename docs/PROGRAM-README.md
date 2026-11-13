@@ -30,6 +30,7 @@ Python and an internet connection are not required for the packaged program. The
 | Feature | How to use it |
 | --- | --- |
 | View available signals | Search **All signals**, check the tags you want, and assign each to the left or right axis. |
+| Plot one variable against another | Click **X** beside the horizontal signal, then check the Y signals. See the [X–Y walkthrough](PROGRAM-GUIDE.md#plot-one-variable-against-another-xy). |
 | Start with a useful grouping | Choose one of the five standard views listed below. |
 | Compare heats | Choose **Overlay files** and include recordings with the file checkboxes. |
 | Review heats individually | Choose **One file at a time**, then Previous/Next. |
@@ -54,20 +55,20 @@ The [full guide](PROGRAM-GUIDE.md#five-standard-views) lists exact tags and expl
 
 ## Pinning coordinates
 
-Click once inside the plot. A numbered crosshair stays in place after you move the mouse away, and its sidebar row shows time plus left/right axis coordinates.
+Click once inside the plot. A numbered crosshair stays in place after you move the mouse away, and its sidebar row shows time or the chosen X variable, plus left/right Y coordinates.
 
 - Add up to **10 points**.
 - Click a row to select its crosshair; click its X to remove it.
 - **Live cursor** resumes mouse tracking while keeping the points.
 - **Clear pins** removes all of them.
 
-Pins keep their values when you zoom or change line style. Changing recordings, signals, axis assignments or the time axis clears them. Pins are temporary and are not included in saved views or exported PNGs.
+Pins keep their values when you zoom or change line style. Changing recordings, signals, axis assignments or the X axis clears them. Pins are temporary and are not included in saved views or exported PNGs.
 
 **Crosshair readings are cursor coordinates.** Hover tooltips on the traces show actual recorded sample values.
 
 ## What is remembered
 
-Saved views retain signals, colors, left/right assignments and display settings. Reopen your RPH files each time; recording files, zoom and pins are not stored in a view.
+Saved views retain the X variable or time mode, Y signals, colors, left/right assignments and display settings. Older time-based views still work. Back up settings before upgrading; v1.0.x cannot read new X–Y views. Reopen your RPH files each time; recording files, zoom and pins are not stored in a view.
 
 Your saved views are stored at:
 
@@ -82,6 +83,7 @@ Keep a backup of that file or export important views. If the app reports damaged
 - [First comparison, step by step](PROGRAM-GUIDE.md#walkthrough-sergios-first-comparison)
 - [Load and compare recordings](PROGRAM-GUIDE.md#open-and-compare-recordings)
 - [Customize and save a view](PROGRAM-GUIDE.md#customize-and-save-a-view)
+- [Choose variables for X and Y](PROGRAM-GUIDE.md#plot-one-variable-against-another-xy)
 - [Read and pin coordinates](PROGRAM-GUIDE.md#read-and-pin-coordinates)
 - [Chart controls](PROGRAM-GUIDE.md#chart-controls)
 - [Troubleshooting and recovery](PROGRAM-GUIDE.md#troubleshooting-and-recovery)

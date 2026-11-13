@@ -11,6 +11,7 @@ if not (app / 'Dauch EAF Graph Viewer.exe').is_file() or not (app / 'engine' / '
     raise SystemExit('Build the Windows application before packaging: run build_graph_viewer.ps1.')
 collect(app)
 # Ship an offline program manual, not the repository/developer README.
+shutil.copyfile(root / 'GRAPH VIEWER - START HERE.txt', app / 'START HERE.txt')
 shutil.copyfile(root / 'docs' / 'PROGRAM-README.md', app / 'README.md')
 shutil.copyfile(root / 'Open Guides in VS Code.cmd', app / 'Open Guides in VS Code.cmd')
 guide = (root / 'docs' / 'USER_GUIDE.md').read_text(encoding='utf-8')

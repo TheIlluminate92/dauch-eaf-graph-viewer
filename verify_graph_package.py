@@ -10,8 +10,10 @@ import struct
 import subprocess
 import sys
 import tempfile
+import math
 from urllib.request import Request, urlopen
 from urllib.error import HTTPError
+from rph_reader import read_rph
 
 EXE = Path(sys.argv[1]).resolve()
 REAL = Path(os.environ.get("EAF_RPH_DIR", Path.home() / "Downloads")) / "Hoeganaes23217.rph"
@@ -59,6 +61,19 @@ def main():
             for name in real['signals']:
                 plotted=call(url,'plot',{'files':[real['id']],'signals':[{'name':name}]})
                 assert len(plotted['traces'])==1 and not plotted['missing']
+            recording=read_rph(raw)
+            # Every real tag must also work as X; it must contain raw signal values,
+            # not elapsed time or values drawn from another file.
+            for column,name in enumerate(real['signals']):
+                xy=call(url,'plot',{'files':[real['id']],'x':'signal','x_signal':name,'chart':'scatter','signals':[{'name':'Current1','axis':'right'}]})
+                trace=xy['traces'][0];expected=float(recording.values[0,column])
+                assert trace['x'][0]==(expected if math.isfinite(expected) else None)
+                assert len(trace['x'])==len(trace['y'])==len(trace['customdata'])==3716
+                assert trace['yaxis']=='y2' and trace['mode']=='markers'
+            for chart in ('lines','scatter','both'):
+                xy=call(url,'plot',{'files':[f['id'] for f in state['files']],'x':'signal','x_signal':'MWTot','chart':chart,'signals':[{'name':'Current1'}]})
+                assert len(xy['traces'])==6 and not xy['missing']
+                assert all(not t['connectgaps'] for t in xy['traces'])
             saved={**state['presets'][3],'name':'Package test · Sergio','mode':'overlay','width':0.5,'chart':'scatter'}
             for chart,mode in [('lines','lines'),('scatter','markers'),('both','lines+markers')]:
                 plotted=call(url,'plot',{**saved,'chart':chart,'files':[f['id'] for f in state['files']]})
@@ -68,6 +83,8 @@ def main():
                 plotted=call(url,'plot',{**saved,'width':width,'files':[f['id'] for f in state['files']]})
                 assert all(t['line']['width']==width for t in plotted['traces'])
             call(url,'save',saved)
+            xy_saved={**saved,'name':'Saved X-Y','x':'signal','x_signal':'MWTot','signals':[{'name':'Current1'}]}
+            call(url,'save',xy_saved)
             try:call(url,'upload?name=broken.rph',raw[:-10],True);raise AssertionError('Truncated file accepted')
             except HTTPError as e:assert e.code==400
             with urlopen(url+'plotly.js') as r:assert len(r.read())>1000000
@@ -79,8 +96,10 @@ def main():
             state=call(url,'state');assert state['views'][0]['name']==saved['name'];assert state['views'][0]['mode']=='overlay'
             assert state['views'][0]['width']==0.5
             assert state['views'][0]['chart']=='scatter'
+            xy_view=next(v for v in state['views'] if v['name']=='Saved X-Y')
+            assert xy_view['x']=='signal' and xy_view['x_signal']=='MWTot'
         finally:p.terminate();p.wait(timeout=10)
-    print('PASS: packaged engine; real RPH + five synthetic variants; 30 individual preset plots; 5 overlays; all 644 signals; saved-view restart; malformed-file rejection; bundled offline assets.')
+    print('PASS: packaged engine; real RPH + five synthetic variants; 30 individual preset plots; 5 overlays; all 644 signals on Y AND X; six-file X-Y in all styles; time and X-Y saved-view restart; malformed-file rejection; bundled offline assets.')
 
 
 if __name__=='__main__':main()

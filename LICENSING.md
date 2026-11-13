@@ -6,7 +6,7 @@ Third-party code, dependencies, bundled assets and their notices retain their re
 
 ## Packaging and verification
 
-The project now has an MIT license. Future Windows/source ZIPs include it; Windows packaging also collects the matching Python license and available dependency notices. Existing v1.0.0/v1.0.1 releases remain immutable.
+The project now has an MIT license. The v1.1.0 Windows/source ZIPs include it; Windows packaging also collects the matching Python license and available dependency notices. Existing v1.0.0/v1.0.1 releases remain immutable.
 
 For Python builds, collected distribution notices are a conservative build-environment inventory, not a complete legal clearance. Review missing notices and vendored/native libraries before publishing. Previously embedded notices must remain intact. For other packaging, preserve the existing upstream notices and copy the project LICENSE with the distributed software.
 

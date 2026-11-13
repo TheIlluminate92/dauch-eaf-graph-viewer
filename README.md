@@ -1,6 +1,6 @@
 # Dauch EAF Graph Viewer
 
-A Windows graph viewer for reviewing electric arc furnace (EAF) recordings. Drop in supported **RPH** files, choose the signals you want to see, and compare how they change through a heat.
+A Windows graph viewer for reviewing electric arc furnace (EAF) recordings. Drop in supported **RPH** files, choose the signals you want to see, and compare how they change through a heat or plot one recorded variable against another.
 
 Built for Sergio's SmartArc review workflow: set up a useful signal view once, save it, and reuse it across recordings. The viewer opens in your browser, but the files and processing stay on your computer. The packaged app works offline and does not require Python to be installed.
 
@@ -44,7 +44,21 @@ For a complete worked walkthrough, see [Sergio's first comparison](docs/USER_GUI
 | Impedance response | ZFeedback1–3 and Sp1Imped–Sp3Imped | Response timing and oscillation on separate recorded scales. |
 | Electrode response | Electrode positions and regulator outputs | Motion alongside changes in regulator output. |
 
-Every view is a starting point. Search **All signals** to add tags, then use **L/R** to select their vertical axis. The [operator guide](docs/USER_GUIDE.md#five-standard-views) lists the exact tags. Impedance feedback and setpoints use different recorded scales; numerical tracking error requires confirmed scaling.
+Every view is a starting point. Search **All signals** to add tags, then use **Y-L/Y-R** to select their vertical axis. The [operator guide](docs/USER_GUIDE.md#five-standard-views) lists the exact tags. Impedance feedback and setpoints use different recorded scales; numerical tracking error requires confirmed scaling.
+
+## Choose X and Y variables
+
+1. Search **All signals** for the horizontal variable, such as `MWTot`, and click its **X** button. The viewer switches to **Recorded signal (X–Y)** and initially selects **Scatter**.
+2. Check the variables you want on Y, such as `Current1`. Use **Clear Y selection** first if you want a clean comparison. Choosing a new X removes that variable from Y; you may explicitly check it again to plot a variable against itself.
+3. Under **Selected Y signals**, use **Y-L** for the left vertical scale or **Y-R** for the right. These are both Y axes. The **X signal** dropdown above the graph chooses the single horizontal variable.
+4. Choose **Overlay files** to compare all checked heats, or **One file at a time** and Previous/Next to cycle through them.
+5. Name and **Save** the view. It remembers the X variable, all Y variables, axes, colors and display settings. Export/Import includes the X selection too.
+
+For example, X = `MWTot` and Y = `Current1` shows how phase current varies with total power. Each dot pairs X and Y from the **same sample in the same recording**. Files are never joined to one another. Hover over a dot for its X/Y values, original UTC timestamp and elapsed minutes.
+
+Scatter is usually easiest to read for this comparison. If you choose Lines or Lines + points, samples connect in recording order: X is **not sorted**, so lines can double back. Recording gaps and missing values remain broken. A file without the chosen X signal is skipped with a visible message; it is never assigned a substitute variable.
+
+Crosshairs and pins show the chosen X variable's value, plus the left/right Y coordinates. These cursor coordinates can fall between actual samples. Changing X clears old pins and zoom. To return to a time plot, choose **Minutes from file start** or **Recorded time (UTC)** under **X axis**, or select a standard view.
 
 ## Chart controls
 
@@ -63,15 +77,15 @@ Every view is a starting point. Search **All signals** to add tags, then use **L
 | Make lines finer | Choose **Thickness**, from 0.5 to 3 pixels. |
 | Save a chart image | Use the camera button in the toolbar. |
 
-Up to **ten pins** can be kept at once. Pins capture the cursor's time and left/right axis coordinates; actual recorded samples are shown separately in trace tooltips. Pins remain readable after the pointer leaves and keep their numeric values through zoom and display-style changes.
+Up to **ten pins** can be kept at once. Pins capture the cursor's X (time or signal) and left/right Y coordinates; actual recorded samples are shown separately in trace tooltips. Pins remain readable after the pointer leaves and keep their numeric values through zoom and display-style changes.
 
-Changing recordings, selected signals, axis assignments or the time axis clears pins. Pins are temporary and are not included in saved views or PNG exports.
+Changing recordings, selected signals, axis assignments or the X axis clears pins. Pins are temporary and are not included in saved views or PNG exports.
 
 ## Compare recordings and reuse views
 
 **Overlay files** draws the checked recordings together. **Minutes from file start** aligns their first samples at zero; it does not automatically align process events. Choose **Recorded time (UTC)** when absolute timestamps matter. **One file at a time** lets you cycle through recordings with the same signal selection.
 
-Saved views remember signals, left/right axes, colors, comparison mode, time axis, line shape, thickness and plot style. Use **Export view** and **Import view** to move a configuration between PCs. Load the recording files again in each new session; saved views do not contain recording data, zoom ranges or pins.
+Saved views remember signals, left/right axes, colors, comparison mode, X axis and X signal, line shape, thickness and plot style. Use **Export view** and **Import view** to move a configuration between PCs. Load the recording files again in each new session; saved views do not contain recording data, zoom ranges or pins.
 
 Settings are stored at:
 
@@ -86,10 +100,10 @@ See [backup and recovery](docs/OPERATIONS.md#back-up-and-recover-saved-views) be
 - All signals in the supported recording layout; the five supplied real recordings contain 644 signals each.
 - Five starter views for power/heat progress, phase current balance, arc stability factors, impedance response, and electrode response.
 - Individual recording navigation or overlaid comparisons; elapsed minutes or recorded UTC time.
-- Custom left/right axes, colors, saved views, and JSON view import/export.
+- Any recorded variable on X, one or more on Y, with separate left/right Y scales, colors, saved views and JSON import/export.
 - Lines, scatter, or both; straight/step lines and thickness from 0.5 to 3 pixels.
 - Mouse-wheel zoom, drag-to-zoom, double-click reset, and PNG chart export.
-- Live crosshair with time and both axis coordinates; click to keep up to ten numbered points.
+- Live crosshair with X and both Y axis coordinates; click to keep up to ten numbered points.
 
 ## Documentation
 

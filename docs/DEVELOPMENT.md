@@ -25,9 +25,9 @@ Optional engine arguments: recording paths as positional arguments, `--no-browse
 node test_cursor_tools.cjs
 ```
 
-Six Python methods use recordings generated from scratch. Two more require the private real RPH fixtures and explicitly skip when unavailable. To run all eight, set `EAF_RPH_DIR` to the local folder containing `Hoeganaes23215.rph` through `Hoeganaes23219.rph`, then repeat the Python command. The default fixture folder is the current user's Downloads folder. Do not commit those recordings.
+Nine Python methods use recordings generated from scratch. Two more require the private real RPH fixtures and explicitly skip when unavailable. To run all eleven, set `EAF_RPH_DIR` to the local folder containing `Hoeganaes23215.rph` through `Hoeganaes23219.rph`, then repeat the Python command. The default fixture folder is the current user's Downloads folder. Do not commit those recordings.
 
-The tests validate parsing/corruption, gaps and overlays, HTTP boundaries, saved-view validation and persistence, external view changes, all presets against real tags, and stable file styles/trace IDs. The Node suite validates coordinate math, the ten-pin cap, immutability, ID reuse, context changes, clicks, drags, double-clicks and cancellation. It does not replace browser testing.
+The X–Y tests cover sample/file pairing, duplicate and decreasing X, gaps, missing/nonfinite values, timestamps and legacy views. The tests validate parsing/corruption, gaps and overlays, HTTP boundaries, saved-view validation and persistence, external view changes, all presets against real tags, and stable file styles/trace IDs. The Node suite validates coordinate math, the ten-pin cap, immutability, ID reuse, context changes, clicks, drags, double-clicks and cancellation. It does not replace browser testing.
 
 ## Build and package
 
@@ -50,7 +50,7 @@ With the private `Hoeganaes23217.rph` fixture available:
 .\.venv\Scripts\python.exe verify_graph_package.py '.\outputs\graph-extracted-release\Dauch EAF Graph Viewer\engine\EAFGraphEngine.exe'
 ```
 
-This launches the bundled engine, uploads the real recording and five modified comparison variants, plots every one of the 644 signals, checks individual and overlaid presets, checks line thickness/chart modes, rejects truncation, and restarts to verify saved views. The variants derive from real plant data and remain private local test inputs; they are never release assets.
+This launches the bundled engine, uploads the real recording and five modified comparison variants, plots every one of the 644 signals on Y and as X, checks individual and overlaid presets, checks X–Y pairing/metadata, line thickness/chart modes, rejects truncation, and restarts to verify saved views. The variants derive from real plant data and remain private local test inputs; they are never release assets.
 
 For the launcher drop integration, compile `test_graph_drop.cs` **beside the extracted launcher** because the launcher resolves `engine` relative to its application base directory:
 
@@ -67,8 +67,8 @@ Use distinct recording contents. The harness compares loaded file count with the
 
 Use an isolated `--views` folder and the packaged engine. Verify five-file overlays and each starter view; add ten pins and reject the eleventh; remove/select/clear pins; test Live cursor; zoom/pan/reset; ensure drag and double-click do not add pins. Verify exact captured values remain unchanged across zoom, thickness and chart-style changes.
 
-Check right-only and dual-axis views, UTC and elapsed time, file navigation/filtering, empty selections, missing signals, and error messages. Rapidly change chart styles and filters to check stale-render handling. Deliberately exceed the plot limit and verify the old chart is hidden. Check no page overflow at the intended display size and inspect browser errors. Capture a screenshot locally; do not publish screenshots containing real plant data by default.
+Check right-only and dual-axis views, UTC and elapsed time, signal-based X (including a missing X), file navigation/filtering, empty selections, missing signals, and error messages. Rapidly change chart styles and filters to check stale-render handling. Deliberately exceed the plot limit and verify the old chart is hidden. Check no page overflow at the intended display size and inspect browser errors. Capture a screenshot locally; do not publish screenshots containing real plant data by default.
 
 ## Publish a release
 
-Review staged files for recordings, generated output, secrets, and local paths. Commit source/docs, tag the tested revision, and upload the Windows ZIP, source ZIP and a SHA-256 manifest to a private GitHub release. Verify the remote commit, release tag, uploaded sizes and downloaded checksum. Record any code-versus-runtime differences in the release notes. Keep original ZIPs for rollback.
+Review staged files for recordings, generated output, secrets, and local paths. Commit source/docs, tag the tested revision, and upload the Windows ZIP, source ZIP and a SHA-256 manifest to a GitHub release under the authorized repository visibility. Verify the remote commit, release tag, uploaded sizes and downloaded checksum. Record any code-versus-runtime differences in the release notes. Keep original ZIPs for rollback.

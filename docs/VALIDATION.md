@@ -1,6 +1,6 @@
 # Validation and bug hunt — 2026-11-13
 
-## Release evidence
+## v1.0.0 release evidence
 
 The Windows runtime was tested as built, then zipped, freshly extracted and tested again. The shipped `viewer.html` and `cursor_tools.js` were byte-compared with the browser-tested sources. Runtime ZIP: approximately 51.1 MiB.
 
@@ -59,3 +59,32 @@ Windows ZIP SHA-256:
 ```
 
 The release checksum manifest covers both Windows and source archives. The source package includes the complete documentation and packaging changes. Neither archive includes private recordings.
+
+
+## v1.1.0 X–Y plots — 2026-11-13
+
+This runtime release adds true signal-versus-signal plotting. It was rebuilt in a clean virtual environment using the pinned dependencies and Python 3.12.14. The smaller archive reflects the clean build environment; it is not a reuse of the previous runtime ZIP.
+
+| Check | Result and scope |
+| --- | --- |
+| Source regression | All 11 Python methods passed, including both private-real-recording checks (no skips). Node coordinate/pin regressions and inline JavaScript syntax passed. |
+| Pairing correctness | Generated-from-scratch recordings verified same-row X/Y pairs, repeated/decreasing X, gap insertion, timestamps, left/right Y, identity X=Y, missing X, NaN/infinity handling and isolation across recordings. Old time views and invalid X settings were checked. |
+| Fresh extracted engine | Passed against one real RPH plus five derived variants: all 644 columns individually on Y and as X; 30 individual preset plots; five preset overlays; six-file X–Y in Lines, Scatter and Both; line widths; saved time/X–Y views after restart; malformed-file rejection; offline assets. |
+| Actual Windows launcher | Automated WinForms drop harness loaded five real files plus one distinct derived variant and re-enabled file selection. This is event injection, not physical mouse dragging. |
+| Browser with packaged engine | Five real recordings: X/Y selection, right-only Y, overlays and filtering, individual cycling, UTC/time switching, same-sample tooltip timestamps, ten-pin cap, wheel zoom and double-click reset, unchanged pinned values after zoom, context clearing, saved-view restore/reload and exported X/Y JSON. |
+| Error recovery | Missing X remained selected and was reported per file. Five-million-point rejection hid the old graph and cleared pins. Selecting a valid saved view recovered. No JavaScript warnings/errors were observed during the final valid-view checks. |
+| Layout/races | Rapid Lines/Scatter/Both changes and a 1366 × 768 viewport check passed. Long Y descriptions are capped; Plotly's redundant responsive handler is disabled in favor of the existing serialized resize queue. The 1912 × 948 view had no document overflow. |
+| Archive/guides | Shipped frontend bytes matched the browser-tested source. Local Markdown links/anchors passed. No RPH/CSV recordings or drop harness are included. The local README, walkthrough and START HERE explain X/Y selection and rollback limitations. |
+| Notices | Project MIT notice, matching Python notice and available distribution notices were included. The collector reported no distributions with zero notice files in the clean environment; this is not a complete legal or vendored-component audit. |
+
+Browser testing was against the newly built packaged engine; the fresh extracted ZIP engine was separately exercised by the automated suite. The exported configuration JSON was inspected after the browser download completed. A new native Import file-picker round trip was not performed; X–Y save/validation/restart is covered by source and packaged tests. Historical v1.0.0 interaction evidence above remains dated evidence, not a claim every earlier browser action was repeated.
+
+The original five RPH files remained local and unchanged. No clean-machine or broader browser/Windows qualification, physical drag acceptance, signing or Sergio end-user acceptance is claimed. Pins remain temporary cursor coordinates, not sampled readings. v1.0.x cannot read new X–Y views; preserve pre-upgrade settings for rollback.
+
+Windows v1.1.0 ZIP SHA-256:
+
+```text
+aa813c5466a54981945a6b5d312567dad0294b990f0fefebeec8833f3b97da6f
+```
+
+The source archive and release manifest bind this dated source/documentation snapshot. The final packaging pass refreshed only local documentation/notices; runtime entries were byte-compared with the tested extraction.

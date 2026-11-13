@@ -129,5 +129,48 @@ class ViewerTests(unittest.TestCase):
             file.write_text('[]',encoding='utf-8');first.reload_views();self.assertFalse(first.warning)
             first.save(STANDARD_VIEWS[0])
 
+    def test_xy_pairs_preserve_sample_order_gaps_and_timestamps(self):
+        raw=bytearray(fixture(('Drive','Response')))
+        offset=23+sum(1+len(n) for n in ('Drive','Response'))+4
+        for i,(x,y) in enumerate([(3,30),(1,10),(3,31)]):
+            struct.pack_into('<ff',raw,offset+i*10+2,x,y)
+        with tempfile.TemporaryDirectory() as d:
+            s=Session(d);a=s.add('loop.rph',bytes(raw))
+            view={'name':'X-Y','files':[a['id']],'x':'signal','x_signal':'Drive','chart':'scatter','signals':[{'name':'Response','axis':'right'}]}
+            t=s.data(view)['traces'][0]
+            self.assertEqual(t['x'],[3,1,None,3]);self.assertEqual(t['y'],[30,10,None,31])
+            self.assertEqual(t['yaxis'],'y2');self.assertEqual(t['mode'],'markers')
+            self.assertEqual(t['customdata'][0],['1970-01-01T00:16:40.250+00:00',0])
+            self.assertIsNone(t['customdata'][2]);self.assertEqual(t['customdata'][3][1],10/60)
+            for chart,mode in [('lines','lines'),('both','lines+markers')]:
+                line=s.data({**view,'chart':chart})['traces'][0]
+                self.assertEqual(line['x'],t['x']);self.assertFalse(line['connectgaps']);self.assertEqual(line['mode'],mode)
+            s.save(view);saved=Session(d).views['X-Y'];self.assertEqual(saved['x_signal'],'Drive');self.assertEqual(saved['x'],'signal')
+            identity=s.data({**view,'signals':[{'name':'Drive'}]})['traces'][0]
+            self.assertEqual(identity['x'],identity['y'])
+
+    def test_xy_missing_and_nonfinite_samples_and_file_isolation(self):
+        with tempfile.TemporaryDirectory() as d:
+            s=Session(d);a=s.add('A.rph',fixture());b=s.add('B.rph',fixture(delta=100));c=s.add('C.rph',fixture(('Other','Current2')))
+            view={'files':[a['id'],b['id'],c['id']],'x':'signal','x_signal':'Current1','signals':[{'name':'Current2'}]}
+            result=s.data(view);self.assertEqual(len(result['traces']),2)
+            self.assertEqual(result['missing'],['C.rph: X signal Current1'])
+            self.assertEqual(result['traces'][1]['x'],[100,101,None,102]);self.assertEqual(result['traces'][1]['y'],[101,102,None,103])
+            empty=s.data({**view,'x_signal':'Absent'});self.assertEqual(empty['traces'],[]);self.assertEqual(len(empty['missing']),3)
+            s.files[a['id']]['recording'].values[0,0]=np.nan;s.files[a['id']]['recording'].values[1,1]=np.inf
+            t=s.data({**view,'files':[a['id']]})['traces'][0]
+            self.assertEqual(t['x'],[None,1,None,2]);self.assertEqual(t['y'],[None,None,None,3])
+            json.dumps(t,allow_nan=False)
+
+    def test_xy_validation_and_legacy_views(self):
+        for bad in (None,False,123,[],{},'', '   ', 'x'*256):
+            with self.assertRaises(ValueError):validate_view({'name':'Bad','signals':[],'x':'signal','x_signal':bad})
+        with self.assertRaises(ValueError):validate_view({'name':'Bad','signals':[],'x':'signal'})
+        old=validate_view(STANDARD_VIEWS[0]);self.assertEqual(old['x'],'elapsed');self.assertEqual(old['x_signal'],'')
+        with tempfile.TemporaryDirectory() as d:
+            s=Session(d)
+            for bad in ([],None,'bad'):
+                with self.assertRaises(ValueError):s.data(bad)
+
 
 if __name__=='__main__':unittest.main()

@@ -22,24 +22,38 @@ These groupings use the actual recorded tags. Factor meanings, engineering units
 
 ## Customize and save a view
 
-Search **All signals**, check the desired tags, and set each selected signal to L or R. Use the color picker to distinguish signals. A view remembers signals, axis assignments, colors, comparison mode, time axis, line shape, thickness, and plot style.
+Search **All signals**, check the desired tags, and set each selected Y signal to Y-L or Y-R. Use the color picker to distinguish signals. A view remembers signals, axis assignments, colors, comparison mode, X axis (time or a recorded signal), line shape, thickness, and plot style.
 
 Give the view a name and click **Save**. Choose it under **My saved views** next time. Export/Import view shares a JSON configuration with another PC. Saved views do not bind to particular recording files, zoom ranges, or pinned points.
 
 Saved settings live in `%LOCALAPPDATA%\Dauch\EAF Graph Viewer\views.json`. Recordings must be reopened in each new launcher session.
 
+## Plot one variable against another (X–Y)
+
+1. Search **All signals** for the horizontal variable, such as `MWTot`, and click its **X** button. The viewer switches to **Recorded signal (X–Y)** and initially selects **Scatter**.
+2. Check the variables you want on Y, such as `Current1`. Use **Clear Y selection** first if you want a clean comparison. Choosing a new X removes that variable from Y; you may explicitly check it again to plot a variable against itself.
+3. Under **Selected Y signals**, use **Y-L** for the left vertical scale or **Y-R** for the right. These are both Y axes. The **X signal** dropdown above the graph chooses the single horizontal variable.
+4. Choose **Overlay files** to compare all checked heats, or **One file at a time** and Previous/Next to cycle through them.
+5. Name and **Save** the view. It remembers the X variable, all Y variables, axes, colors and display settings. Export/Import includes the X selection too.
+
+For example, X = `MWTot` and Y = `Current1` shows how phase current varies with total power. Each dot pairs X and Y from the **same sample in the same recording**. Files are never joined to one another. Hover over a dot for its X/Y values, original UTC timestamp and elapsed minutes.
+
+Scatter is usually easiest to read for this comparison. If you choose Lines or Lines + points, samples connect in recording order: X is **not sorted**, so lines can double back. Recording gaps and missing values remain broken. A file without the chosen X signal is skipped with a visible message; it is never assigned a substitute variable.
+
+Crosshairs and pins show the chosen X variable's value, plus the left/right Y coordinates. These cursor coordinates can fall between actual samples. Changing X clears old pins and zoom. To return to a time plot, choose **Minutes from file start** or **Recorded time (UTC)** under **X axis**, or select a standard view.
+
 ## Read and pin coordinates
 
-Move the mouse inside the plotting area for a vertical time line and a horizontal coordinate line. Labels show time along the bottom and the corresponding left/right axis coordinates. A missing axis displays a dash. Signal tooltips separately show actual recorded samples.
+Move the mouse inside the plotting area for a vertical X line and a horizontal coordinate line. Labels show time or the chosen X signal value along the bottom and the corresponding left/right axis coordinates. A missing axis displays a dash. Signal tooltips separately show actual recorded samples.
 
-Click once to keep that crosshair in place. Each click adds a numbered pin, up to ten. The sidebar lists its original time and coordinates, so the readings remain available even if zoom moves the point off-screen.
+Click once to keep that crosshair in place. Each click adds a numbered pin, up to ten. The sidebar lists its original X value and Y coordinates, so the readings remain available even if zoom moves the point off-screen.
 
 - Click a pin's row to select its crosshair.
 - Click its X to remove that point and free a slot.
 - **Live cursor** resumes mouse tracking while retaining the pin list.
 - **Clear pins** removes all points.
 
-Pins keep their numeric coordinates while zooming or changing line thickness, color, or plot style. Changing recordings, selected signals, left/right assignments, or the time axis clears the pins to avoid applying old coordinates to a different chart. Pins are temporary to this page session and are not saved in views or included in PNG exports.
+Pins keep their numeric coordinates while zooming or changing line thickness, color, or plot style. Changing recordings, selected signals, left/right assignments, or the X axis clears the pins to avoid applying old coordinates to a different chart. Pins are temporary to this page session and are not saved in views or included in PNG exports.
 
 A click is briefly delayed so double-click reset still works. A drag selects a zoom region rather than adding a pin.
 
@@ -79,7 +93,7 @@ Switch back to **One file at a time** and use **Next**/**Previous** to inspect t
 
 ### 5. Make a view he can reuse
 
-Start from **2 · Phase current balance**. Search for a tag using the signal search field and check it to add it. Under **Selected signals**, choose L/R and a color for each tag. Remove unwanted tags with their X. Choose the desired plot style and thickness.
+Start from **2 · Phase current balance**. Search for a tag using the signal search field and check it to add it. Under **Selected Y signals**, choose Y-L/Y-R and a color for each tag. Remove unwanted tags with their X. Choose the desired plot style and thickness.
 
 Enter a descriptive name such as `Sergio - phase current review` and click **Save**. Select another standard view, then choose the saved name under **My saved views** to restore that setup. If you reuse an existing name, confirm replacement only when you mean to update that view.
 

@@ -4,7 +4,15 @@ Reviewed November 13, 2026 (America/Chicago). This is the concise continuation s
 
 ## Current publication and licensing
 
-As of November 13, 2026, GitHub reports this repository public, matching the owner's publication instruction. The owner subsequently authorized MIT for original project code. See [LICENSING](../LICENSING.md); the older private-publication checks below are historical, not the current visibility. Future package notice inclusion is implemented in source; no replacement release or new runtime acceptance is claimed.
+As of November 13, 2026, GitHub reports this repository public, matching the owner's publication instruction. The owner subsequently authorized MIT for original project code. See [LICENSING](../LICENSING.md); the older private-publication checks below are historical, not the current visibility. v1.1.0 includes project/Python/distribution notices and the tested X–Y runtime; earlier release assets remain unchanged.
+
+## Current implementation — v1.1.0
+
+Sergio clarified that X must be a chosen recorded variable and Y another variable. v1.1.0 adds that workflow: the sidebar X button or X signal dropdown selects one horizontal tag; checkboxes select Y variables with Y-L/Y-R scales. Views persist the X tag, tooltips retain sample timestamps, and pins label the chosen variable. Pairing is within each file and sample, without sorting or interpolation.
+
+Source checks, five-real-file browser checks, the fresh packaged engine (all 644 tags on each axis), and the native six-file drop harness passed. See the dated [v1.1.0 evidence](VALIDATION.md#v110-xy-plots--2026-11-13). Operator/local guides are updated. Historian retains organization ownership after the release handoff. Sergio end-user acceptance and the open items below remain outstanding.
+
+Old time views load in v1.1.0. Older v1.0.x apps cannot read new X–Y views; preserve a pre-upgrade settings backup for rollback.
 
 ## Ownership and accepted baseline
 

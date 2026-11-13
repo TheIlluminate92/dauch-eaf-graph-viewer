@@ -13,7 +13,8 @@
  function axisValue(axis,fraction){const a=numeric(axis,axis.range[0]),b=numeric(axis,axis.range[1]);return a+(b-a)*fraction;}
  function axisFraction(axis,value){const a=numeric(axis,axis.range[0]),b=numeric(axis,axis.range[1]);return b===a?NaN:(value-a)/(b-a);}
  function number(value){return Number.isFinite(value)?Number(value.toPrecision(7)).toLocaleString('en-US',{maximumFractionDigits:8}):'—';}
- function time(value,type){return type==='date'?new Date(value).toISOString().replace('T',' ').replace('Z',' UTC'):number(value)+' min';}
+ function time(value,type){return type==='date'?new Date(value).toISOString().replace('T',' ').replace('Z',' UTC'):number(value)+(type==='signal'?'':' min');}
+ function xLabel(point){return point.type==='signal'?'X ('+point.xLabel+')':'Time';}
  class PinStore{
   constructor(){this.pins=[];this.active=null;this.context=null;}
   setContext(context){const changed=this.context!==null&&this.context!==context;this.context=context;if(changed)this.clear();return changed;}
@@ -43,7 +44,7 @@
  }
  function mount(gd,resize){
   const $=id=>document.getElementById(id),store=new PinStore();
-  let pointer=null,frame=0,enabled=false,bound=false;
+  let pointer=null,frame=0,enabled=false,bound=false,axisInfo={kind:'elapsed',label:''};
   const create=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
   function geometry(){
    const l=gd._fullLayout;if(!l?.xaxis||!l.width||!l.height)return null;
@@ -58,7 +59,7 @@
    if(fx<0||fx>1||fy<0||fy>1||!Number.isFinite(fx+fy))return null;
    const left=visible('y')?axisValue(g.l.yaxis,fy):null,right=visible('y2')&&g.l.yaxis2?axisValue(g.l.yaxis2,fy):null;
    if(left===null&&right===null)return null;
-   return {x:axisValue(g.l.xaxis,fx),left,right,type:g.l.xaxis.type,anchor:left!==null?'left':'right'};
+   return {x:axisValue(g.l.xaxis,fx),left,right,type:axisInfo.kind==='signal'?'signal':g.l.xaxis.type,xLabel:axisInfo.label,anchor:left!==null?'left':'right'};
   }
   function yPixel(g,point,side){const axis=side==='left'?g.l.yaxis:g.l.yaxis2;return axis&&Number.isFinite(point[side])?g.top+(1-axisFraction(axis,point[side]))*g.height:NaN;}
   function inY(g,y){return Number.isFinite(y)&&y>=g.top-0.5&&y<=g.top+g.height+0.5;}
@@ -68,7 +69,7 @@
    $('clearPins').disabled=!store.pins.length;$('liveCursor').disabled=store.active===null;
    for(const pin of store.pins){
     const row=create('div',undefined,'pin-row'+(store.active===pin.id?' active':''));
-    const select=create('button',`P${pin.id} · ${time(pin.x,pin.type)}\nLeft: ${number(pin.left)}  |  Right: ${number(pin.right)}`,'pin-select');
+    const select=create('button',`P${pin.id} · ${xLabel(pin)}: ${time(pin.x,pin.type)}\nY left: ${number(pin.left)}  |  Y right: ${number(pin.right)}`,'pin-select');
     select.title='Show pinned crosshair P'+pin.id;select.onclick=()=>{store.active=pin.id;renderTable();schedule();};
     const remove=create('button','×','pin-remove');remove.setAttribute('aria-label','Remove pin '+pin.id);remove.onclick=()=>{store.remove(pin.id);$('pinNotice').textContent='';renderTable();schedule();};
     row.append(select,remove);$('pinList').append(row);
@@ -88,7 +89,7 @@
    if(!enabled||!g||!point){hide();return;}
    const fx=axisFraction(g.l.xaxis,point.x),px=g.left+fx*g.width,yl=yPixel(g,point,'left'),yr=yPixel(g,point,'right');
    const anchor=point.anchor==='left'?yl:yr,timeText=time(point.x,point.type);
-   $('cursorReadout').textContent=`${pin?'Pinned P'+pin.id:'Cursor'} · Time: ${timeText}  |  Left: ${number(point.left)}  |  Right: ${number(point.right)}`;
+   $('cursorReadout').textContent=`${pin?'Pinned P'+pin.id:'Cursor'} · ${xLabel(point)}: ${timeText}  |  Y left: ${number(point.left)}  |  Y right: ${number(point.right)}`;
    if(!Number.isFinite(fx)||fx<0||fx>1||!inY(g,anchor)){
     $('cursorOverlay').hidden=true;$('cursorReadout').textContent+=' · Outside current zoom';return;
    }
@@ -103,7 +104,7 @@
    }
    const extra=point.anchor==='left'?yr:yl;$('cursorOtherHorizontal').hidden=!inY(g,extra)||Math.abs(extra-anchor)<1;
    Object.assign($('cursorOtherHorizontal').style,{left:g.left+'px',top:extra+'px',width:g.width+'px'});
-   $('cursorTime').textContent=(pin?'P'+pin.id+' · ':'')+timeText;const half=$('cursorTime').offsetWidth/2;
+   $('cursorTime').textContent=(pin?'P'+pin.id+' · ':'')+(point.type==='signal'?'X: ':'')+timeText;const half=$('cursorTime').offsetWidth/2;
    Object.assign($('cursorTime').style,{left:Math.max(half,Math.min(g.rect.width-half,px))+'px',top:(g.top+g.height+2)+'px'});
   }
   function schedule(){if(!frame)frame=requestAnimationFrame(draw);}
@@ -130,9 +131,9 @@
   renderTable();
   return {
    begin(){enabled=false;pointer=null;clicks.cancel();hide();$('pinMarkers').replaceChildren();},
-   ready(context){const count=store.pins.length;const changed=store.setContext(context);if(changed&&count)$('pinNotice').textContent='Pins cleared because recordings, signals, or the time axis changed.';enabled=true;bind();renderTable();schedule();},
+   ready(context,info={kind:'elapsed',label:''}){axisInfo=info;const count=store.pins.length;const changed=store.setContext(context);if(changed&&count)$('pinNotice').textContent='Pins cleared because recordings, signals, or the X axis changed.';enabled=true;bind();renderTable();schedule();},
    fail(){store.clear();renderTable();enabled=false;hide();$('pinMarkers').replaceChildren();}
   };
  }
- return {PinStore,ClickTracker,axisValue,axisFraction,number,time,mount};
+ return {PinStore,ClickTracker,axisValue,axisFraction,number,time,xLabel,mount};
 });

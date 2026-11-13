@@ -11,7 +11,10 @@ Keep the launcher window open while using the viewer in your normal browser.
 3. Use One file at a time and Previous / Next, or Overlay files.
    Overlay starts at each file's first sample. Recorded time (UTC) is also available.
    File checkboxes include/exclude recordings in overlay mode.
-4. Search all signals to customize the view. Select left/right axes and colors.
+4. Search all signals. Click X beside the horizontal variable, then check Y variables.
+   Or keep elapsed/UTC time on X. Y-L/Y-R choose the left/right vertical scale.
+   X-Y defaults to Scatter; pairs come from the same sample in each recording.
+   Lines follow recording order, not sorted X. Save remembers the X variable too.
 5. Name the view and Save. Export/Import view lets Sergio share settings with another PC.
    Thickness controls all plotted lines, from 0.5 to 3 pixels (default: 1 pixel).
    Thickness is remembered in saved/exported views and applies in both comparison modes.
@@ -22,14 +25,14 @@ The original RPH files are never modified. Everything runs on this computer.
 Closing the launcher stops the viewer; saved views remain. Reload recordings next time.
 Graph toolbar: zoom, pan, reset, and save a PNG. Click legend entries to hide traces.
 Move the mouse over the chart for crosshairs, left/right axis coordinate labels,
-and a highlighted time along the bottom. Tooltips still show actual recorded samples.
+and a highlighted time or X signal value along the bottom. Tooltips still show actual recorded samples.
 Turn the mouse wheel over the chart to zoom; double-click to reset the view.
 Click once to pin the crosshair, then move the mouse away to read its coordinates.
-Keep up to 10 points. Each numbered row shows time and both axis coordinates.
+Keep up to 10 points. Each numbered row shows X and both Y axis coordinates.
 Click a row to select its crosshair, use its X to remove it, or Clear pins to start over.
 Live cursor resumes mouse tracking without removing the saved points on this chart.
 Pins retain their original coordinates through zoom, line thickness and plot-style changes.
-Changing recordings, selected signals, axis assignments or the time axis clears them.
+Changing recordings, selected signals, axis assignments or the X axis clears them.
 Pins are temporary to this chart session; they are not saved in reusable views.
 The PNG toolbar export includes the plotted data, but not the crosshair/pin overlays.
 Crosshair coordinates describe the cursor position, not a nearest sample on each signal.
