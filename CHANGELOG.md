@@ -1,5 +1,11 @@
 # Changes
 
+## Unreleased documentation
+
+- Added current maintainer handoff, repository worker instructions, saved-view field reference and dated Historian standards review.
+- Updated ownership/navigation and linked recovery instructions to the settings contract.
+- Application code and v1.0.0 release assets are unchanged.
+
 ## v1.0.0 — 2026-11-13
 
 First documented private GitHub release of the Windows RPH graph viewer.

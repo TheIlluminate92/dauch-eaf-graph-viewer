@@ -23,7 +23,7 @@
 2. Copy `%LOCALAPPDATA%\Dauch\EAF Graph Viewer\views.json` to a dated backup. Individual JSON exports are also useful for sharing or restoring one view.
 3. Keep original recording files separately; they are not embedded in the view settings.
 
-If a saved-view warning appears, the app preserves the unreadable original and refuses to save over it. Copy it somewhere safe first. Then either repair the JSON using the documented schema, restore a known-good backup, or rename the damaged file and reopen the app for a fresh list. Do not discard the only copy.
+If a saved-view warning appears, the app preserves the unreadable original and refuses to save over it. Copy it somewhere safe first. Then either repair the JSON using the [saved-view reference](SAVED-VIEWS.md), restore a known-good backup, or rename the damaged file and reopen the app for a fresh list. Do not discard the only copy.
 
 Another open viewer can save views to the same folder. Saves are locked and atomic. The browser is not a live shared editor: refresh the page to discover another window's changes, which also resets temporary pins.
 

@@ -27,12 +27,16 @@ Pins remain readable after moving the mouse away. They survive zoom and display-
 
 ## Documentation
 
+Erik owns product decisions; Reporter Recreation owns implementation; Work Historian owns documentation organization. Start maintenance with [current handoff](docs/HANDOFF.md) and [worker instructions](AGENTS.md).
+
 - [Operator guide](docs/USER_GUIDE.md): everyday workflow, presets, saved views, pins, and comparisons.
 - [Architecture and RPH format](docs/ARCHITECTURE.md): components, data handling, format boundaries, and local service routes.
 - [Development and release](docs/DEVELOPMENT.md): exact versions, build commands, tests, and packaging.
 - [Troubleshooting and recovery](docs/OPERATIONS.md): startup, plotting, saved-view backup, and rollback.
 - [Validation and bug hunt](docs/VALIDATION.md): completed tests, fixes, evidence scope, and remaining limits.
 - [Project history and handoff](docs/HISTORY.md): original CSV workflow, transition to RPH, and continuation notes.
+- [Saved-view reference](docs/SAVED-VIEWS.md): fields, defaults and recovery checks.
+- [Historian review](docs/HISTORIAN-REVIEW-2026-11-13.md): standards coverage and remaining acceptance.
 - [Third-party components](docs/THIRD_PARTY.md).
 - [Release changes](CHANGELOG.md).
 

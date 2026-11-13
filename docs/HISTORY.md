@@ -16,7 +16,7 @@ The primary product is the Windows RPH viewer. The entry point is `EAFGraphViewe
 
 The original CSV notebook/report tools remain in the originating local workspace. They were regression-tested there but are not shipped as part of the graph viewer. Do not silently reintroduce CSV input or imply six real RPH fixtures: five real RPHs were supplied, while some six-file tests use derived variants.
 
-The local Work Historian has been asked to inspect the source conversation and maintain the project index. Its records are separate from the code repository. Final repository/release receipts are supplied to that historian after publication.
+The local Work Historian accepted documentation/project organization after verifying the private v1.0.0 publication at `b121b18ecb78b2f718d2642738cc88cdb1c9a94f`. Reporter Recreation retains implementation ownership. Use [current handoff](HANDOFF.md) for responsibilities and next actions, and [the dated standards review](HISTORIAN-REVIEW-2026-11-13.md) for the subsequent documentation changes. Local portfolio records link this repository rather than duplicate its technical handbook.
 
 ## Future work must preserve
 
