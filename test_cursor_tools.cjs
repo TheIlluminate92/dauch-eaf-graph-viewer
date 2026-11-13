@@ -1,0 +1,33 @@
+// Regression checks for captured values and click/drag/double-click arbitration.
+const assert=require('node:assert/strict');
+const {PinStore,ClickTracker,axisValue,axisFraction,time}=require('./cursor_tools.js');
+const linear={type:'linear',range:[-20,80]},right={type:'linear',range:[500,1500]};
+assert.equal(axisValue(linear,.25),5);assert.equal(axisValue(right,.25),750);
+assert.equal(axisFraction({type:'linear',range:[0,10]},5),.5);
+assert.equal(axisFraction({type:'linear',range:[10,0]},5),.5);
+assert.equal(axisFraction({type:'linear',range:[0,2]},5),2.5); // Outside zoom, never clamped to the wrong coordinate.
+const utc={type:'date',range:['2026-11-13 06:00:00','2026-11-13 07:00:00']};
+assert.equal(time(axisValue(utc,.5),'date'),'2026-11-13 06:30:00.000 UTC');
+assert.equal(axisValue({type:'date',range:['2026-11-13T00:00:00-06:00','2026-11-13T01:00:00-06:00']},.5),axisValue(utc,.5));
+const pins=new PinStore();pins.setContext('heat A / axes A');
+for(let i=0;i<10;i++)assert.equal(pins.add({x:i,left:i+.5,right:i*10,type:'linear',anchor:'left'}).id,i+1);
+const captured=JSON.stringify(pins.pins);assert.equal(pins.add({x:99,left:99}),null);assert.equal(JSON.stringify(pins.pins),captured);
+assert(Object.isFrozen(pins.pins[0]));pins.remove(4);assert.equal(pins.add({x:100,left:null,right:400,type:'linear',anchor:'right'}).id,4);
+assert.equal(pins.pins.length,10);pins.setContext('heat A / axes A');assert.equal(pins.pins.length,10);
+pins.setContext('heat B / axes A');assert.equal(pins.pins.length,0);assert.equal(pins.active,null);
+assert.equal(pins.add({x:NaN,left:1}),null);assert.equal(pins.add({x:1,left:null,right:null}),null);
+let pending=new Map(),next=0,added=[];
+const click=new ClickTracker((p,c)=>added.push([p,c]),360,fn=>{pending.set(++next,fn);return next;},id=>pending.delete(id));
+const event=(x,y,detail=1,button=0)=>({clientX:x,clientY:y,detail,button});
+const point={x:1,left:2,right:3,type:'linear'};
+const flush=()=>{const work=[...pending.values()];pending.clear();work.forEach(f=>f());};
+click.down(event(100,100),point,'A');click.up(event(101,100),'A');assert.equal(added.length,0);flush();assert.equal(added.length,1);
+click.down(event(100,100),point,'A');click.move(event(150,150));click.up(event(100,100),'A');flush();assert.equal(added.length,1);
+click.down(event(100,100),point,'A');click.up(event(100,100),'A');click.down(event(100,100,2),point,'A');click.up(event(100,100,2),'A');flush();assert.equal(added.length,1);
+click.down(event(100,100),point,'A');click.up(event(100,100),'B');flush();assert.equal(added.length,1);
+click.down(event(100,100),point,'A');click.up(event(100,100),'A');click.cancel();flush();assert.equal(added.length,1);
+click.down(event(100,100,1,2),point,'A');click.up(event(100,100,1,2),'A');flush();assert.equal(added.length,1);
+click.down(event(100,100),point,'A');click.up(event(100,100),'A');
+click.down(event(200,100),{...point,x:2},'A');click.up(event(200,100),'A');
+click.down(event(300,100),{...point,x:3},'A');click.up(event(300,100),'A');flush();assert.equal(added.length,4);
+console.log('PASS: dual-axis/UTC/reversed-axis math, ten-pin limit, immutable captured values, removal/reuse, context changes, single click, drag, double-click, cancellation and right-click.');

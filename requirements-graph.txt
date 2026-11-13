@@ -1,0 +1,4 @@
+# Versions used for the packaged and tested graph viewer.
+numpy==2.3.5
+plotly==7.1.0
+pyinstaller==6.22.3
