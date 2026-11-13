@@ -2,11 +2,15 @@
 
 Reviewed November 13, 2026 (America/Chicago). This is the concise continuation sheet; [README](../README.md) routes to the full technical guides.
 
+## Current publication and licensing
+
+As of November 13, 2026, GitHub reports this repository public, matching the owner's publication instruction. The owner subsequently authorized MIT for original project code. See [LICENSING](../LICENSING.md); the older private-publication checks below are historical, not the current visibility. Future package notice inclusion is implemented in source; no replacement release or new runtime acceptance is claimed.
+
 ## Ownership and accepted baseline
 
 Erik owns product scope and acceptance. Reporter Recreation owns implementation and packaging. Work Historian owns documentation and project-record organization following the completed publication handoff.
 
-Private v1.0.0 is published at source commit `b121b18ecb78b2f718d2642738cc88cdb1c9a94f`. The annotated tag resolves to that commit. [Release](https://github.com/TheIlluminate92/dauch-eaf-graph-viewer/releases/tag/v1.0.0) includes Windows/source ZIPs and SHA256SUMS.txt. Current main may contain later documentation; those edits do not replace the v1.0.0 assets.
+Originally private v1.0.0 was published at source commit `b121b18ecb78b2f718d2642738cc88cdb1c9a94f`. The annotated tag resolves to that commit. [Release](https://github.com/TheIlluminate92/dauch-eaf-graph-viewer/releases/tag/v1.0.0) includes Windows/source ZIPs and SHA256SUMS.txt. Current main may contain later documentation; those edits do not replace the v1.0.0 assets.
 
 Historian independently checked repository privacy, source/tag identity, release metadata and remote operator documentation. Package redownloads, archive inspection and runtime tests remain the publisher's evidence in [VALIDATION](VALIDATION.md). No new runtime acceptance was performed by documentation review.
 

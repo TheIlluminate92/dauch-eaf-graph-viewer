@@ -1,5 +1,9 @@
 # Changes
 
+## Unreleased — licensing maintenance (2026-11-13)
+
+The project now has an MIT license. Future Windows/source ZIPs include it; Windows packaging also collects the matching Python license and available dependency notices. Existing v1.0.0/v1.0.1 releases remain immutable. See [LICENSING.md](LICENSING.md). No runtime behavior or existing release asset changed.
+
 ## v1.0.1 — 2026-11-13
 
 - Bundled a program-specific local README and full walkthrough as Markdown, including controls, features, saved views, pins, comparison workflow and troubleshooting.

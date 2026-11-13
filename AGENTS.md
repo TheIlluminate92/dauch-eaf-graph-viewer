@@ -2,7 +2,7 @@
 
 Start with [README](README.md) and [current maintainer handoff](docs/HANDOFF.md). Erik owns product decisions; Reporter Recreation owns implementation; Work Historian owns documentation organization. A handoff transfers context, not operational authority.
 
-Keep this repository and releases private. Do not add recordings, CSV reports, plant-derived synthetic fixtures, screenshots with plant values, credentials, local session URLs or machine inventories. Generated-from-scratch test fixtures are distinct from modified real recordings.
+The owner authorized public distribution of this application and MIT licensing of its original code. Public visibility does not authorize publishing plant material. Do not add recordings, CSV reports, plant-derived synthetic fixtures, screenshots with plant values, credentials, local session URLs or machine inventories. Generated-from-scratch test fixtures are distinct from modified real recordings.
 
 Preserve raw values, gaps, format rejection, saved-view integrity and the difference between cursor coordinates and sampled values. Read the relevant architecture and validation sections before changes.
 

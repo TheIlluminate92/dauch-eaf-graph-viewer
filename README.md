@@ -119,3 +119,8 @@ The current graph viewer does not open CSV files. The earlier notebook and CSV r
 The release was checked with five real RPH recordings, automated source tests, browser interaction checks and the actual packaged Windows engine and launcher. The six-file launcher check used those five recordings plus one derived test variant, through automated drop events. Downloaded release ZIPs matched their published SHA-256 checksums.
 
 See the [validation record](docs/VALIDATION.md) for the bug fixes, exact test coverage and limits. Compatibility with other RPH layouts and a broad Windows/browser matrix has not been established.
+
+
+## License and redistribution
+
+[MIT License](LICENSE): reuse and modification are allowed with the notice retained. Provided as is, without warranty. See [licensing and packaging scope](LICENSING.md) for third-party terms and release limitations.

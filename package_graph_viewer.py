@@ -2,12 +2,14 @@
 from pathlib import Path
 import shutil
 import zipfile
+from collect_license_notices import collect
 
 root = Path(__file__).resolve().parent
 app = root / 'release' / 'graph-final' / 'Dauch EAF Graph Viewer'
 bundle = root / 'Dauch_EAF_Graph_Viewer_Windows.zip'
 if not (app / 'Dauch EAF Graph Viewer.exe').is_file() or not (app / 'engine' / 'EAFGraphEngine.exe').is_file():
     raise SystemExit('Build the Windows application before packaging: run build_graph_viewer.ps1.')
+collect(app)
 # Ship an offline program manual, not the repository/developer README.
 shutil.copyfile(root / 'docs' / 'PROGRAM-README.md', app / 'README.md')
 shutil.copyfile(root / 'Open Guides in VS Code.cmd', app / 'Open Guides in VS Code.cmd')
@@ -33,7 +35,7 @@ sources = ['rph_reader.py', 'graph_viewer.py', 'standard_views.py', 'viewer.html
            'EAFGraphViewer.cs', 'test_viewer.py', 'test_graph_drop.cs',
            'verify_graph_package.py', 'build_graph_viewer.ps1',
            'package_graph_viewer.py', 'GRAPH VIEWER - START HERE.txt', 'requirements-graph.txt',
-           'README.md', 'CHANGELOG.md', 'AGENTS.md', 'Open Guides in VS Code.cmd', '.gitignore']
+           'LICENSE', 'LICENSING.md', 'collect_license_notices.py', 'README.md', 'CHANGELOG.md', 'AGENTS.md', 'Open Guides in VS Code.cmd', '.gitignore']
 with zipfile.ZipFile(root / 'Dauch_EAF_Graph_Viewer_Source.zip', 'w', zipfile.ZIP_DEFLATED) as z:
     for name in sources:
         z.write(root / name, name)
