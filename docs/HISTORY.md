@@ -18,6 +18,10 @@ The original CSV notebook/report tools remain in the originating local workspace
 
 The local Work Historian accepted documentation/project organization after verifying the private v1.0.0 publication at `b121b18ecb78b2f718d2642738cc88cdb1c9a94f`. Reporter Recreation retains implementation ownership. Use [current handoff](HANDOFF.md) for responsibilities and next actions, and [the dated standards review](HISTORIAN-REVIEW-2026-11-13.md) for the subsequent documentation changes. Local portfolio records link this repository rather than duplicate its technical handbook.
 
+## November 13, 2026 — local README editing draft
+
+At Erik's request, Reporter Recreation expanded the README for editing in VS Code, adding the first-review workflow, standard-view summary, controls and saved-view instructions. The draft was reconciled with the historian's published documentation commit `29c5b757617e0b8f3bba5e7155ac1f6e73aac5f9`; historian navigation and reference links were retained. It was subsequently included in v1.0.1 alongside local Markdown program guides in the download package. The package adds a VS Code guide opener and does not change the app runtime. Scoped checks are recorded in VALIDATION; the Teams announcement remains a draft for Erik to send.
+
 ## Future work must preserve
 
 - Raw readings and recording gaps; no invented units, scale conversions or fault thresholds.

@@ -40,6 +40,8 @@ The build produces `release\graph-final\Dauch EAF Graph Viewer\`, containing the
 
 The published v1.0.0 Windows ZIP contains the exact application bytes tested in the browser and fresh-extraction checks. Its source ZIP also includes this documentation. The repository adds portable fixture discovery and documentation after the runtime build; no runtime code changed afterward.
 
+Starting with v1.0.1, packaging refreshes the Windows ZIP's local `README.md` from `docs/PROGRAM-README.md` and builds `PROGRAM-GUIDE.md` from the operator guide plus operator-facing recovery instructions. It also copies `Open Guides in VS Code.cmd`. Check both Markdown files' relative links and headings in the extracted package. The program README links deliberately target package-local filenames, so check them in the package rather than treating `docs/PROGRAM-README.md` as a repository navigation page. Source ZIPs include `AGENTS.md` and the guide opener as well as the full docs folder.
+
 ## Test the actual package
 
 With the private `Hoeganaes23217.rph` fixture available:

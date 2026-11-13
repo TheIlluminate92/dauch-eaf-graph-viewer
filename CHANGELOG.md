@@ -1,6 +1,13 @@
 # Changes
 
-## Unreleased documentation
+## v1.0.1 — 2026-11-13
+
+- Bundled a program-specific local README and full walkthrough as Markdown, including controls, features, saved views, pins, comparison workflow and troubleshooting.
+- Added an Open Guides in VS Code shortcut; VS Code remains optional for running the viewer.
+- Expanded the repository README with the first-review workflow and chart-control reference.
+- Packaging now includes current root instructions and local guides in the appropriate archives. Runtime application files are unchanged from v1.0.0.
+
+### Historian documentation included
 
 - Added current maintainer handoff, repository worker instructions, saved-view field reference and dated Historian standards review.
 - Updated ownership/navigation and linked recovery instructions to the settings contract.

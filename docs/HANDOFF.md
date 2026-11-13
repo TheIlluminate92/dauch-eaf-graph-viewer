@@ -29,4 +29,6 @@ Persisted annotations, pins in PNG exports and process-event heat alignment are 
 
 ## Continue safely
 
+Documentation/package update, November 13, 2026: v1.0.1 includes the expanded repository README and adds a local program README, full program walkthrough and VS Code guide opener to the Windows ZIP. This incorporates the historian's documentation baseline without removing its navigation. All original v1.0.0 archive files were byte-compared and are unchanged. Fresh extraction/startup, guide links and opener checks passed; see [validation](VALIDATION.md#v101-local-program-guides--2026-11-13). The prior full runtime test evidence remains v1.0.0 evidence. The Teams announcement is a draft for Erik to send. Erik stated he will make GitHub public for the recipient; the implementation owner does not change repository visibility as part of packaging.
+
 Read current source and changed guides, identify the affected contract, and preserve evidence dates. Update current instructions and dated evidence in the same batch. No server, controller or plant change is authorized by this repository's documentation ownership.

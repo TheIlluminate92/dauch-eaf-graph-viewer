@@ -43,3 +43,19 @@ The real recordings were Hoeganaes23215 through 23219 (3,458; 3,486; 3,701; 3,11
 This is a tested local Windows build, not a guarantee of zero defects. No clean-machine installer qualification, code-signing setup, long-duration endurance test or complete browser/Windows matrix was performed. Files with other RPH layouts are unverified. Rendering millions of points can be slow before the guard is reached.
 
 Pins are cursor coordinates, not per-signal sampled values. They are temporary, are cleared on chart-context changes, and are absent from PNG export. Saved views do not persist recordings or zoom. The five preset groupings are project choices, not vendor-certified diagnostics. Units/scaling and alarm thresholds remain site-documentation questions.
+
+## v1.0.1 local program guides — 2026-11-13
+
+This is a documentation/package update. Every original v1.0.0 ZIP entry, including the engine, launcher, frontend and dependency files, was compared byte-for-byte with the new ZIP and matched. The additions are local `README.md`, `PROGRAM-GUIDE.md` and `Open Guides in VS Code.cmd`. The v1.0.0 release assets remain unchanged.
+
+The guides cover the program itself: startup, features, standard views, axes, controls, pins, saved views, file comparisons, a complete Sergio walkthrough, troubleshooting and recovery. All relative guide links and heading anchors were checked in the fresh extraction. The opener ran successfully with installed VS Code; an isolated environment without VS Code displayed the documented fallback instructions and made no installation/settings changes. VS Code preview formatting is standard Markdown; this package check did not include a new visual preview acceptance test.
+
+The freshly extracted engine started successfully and served the viewer page, cursor script and session state. This was a startup/asset smoke check, not a repeat of the full v1.0.0 browser or recording test matrix. No new clean-machine, restore, signing or broad compatibility acceptance is claimed.
+
+Windows ZIP SHA-256:
+
+```text
+60f7b8f70076b6659a9bad0fb360ff0d4773d2153772ad5063f8e583a8162945
+```
+
+The release checksum manifest covers both Windows and source archives. The source package includes the complete documentation and packaging changes. Neither archive includes private recordings.
